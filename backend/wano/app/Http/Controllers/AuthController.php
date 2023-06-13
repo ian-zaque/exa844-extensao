@@ -17,7 +17,7 @@ class AuthController extends Controller {
      * @return void
      */
     public function __construct() {
-        $this->middleware('auth:api', ['except' => ['login', 'register', 'create']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register',]]);
     }
 
     /**
@@ -118,6 +118,41 @@ class AuthController extends Controller {
 
         return response()->json([
             'message' => 'User successfully created',
+            'user' => $user
+        ], 201);
+    }
+
+    /**
+     * Atualiza um usuário.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'name' => 'sometimes|string|between:2,100',
+            'email' => 'sometimes|string|email|max:100|unique:users',
+            'role' => 'sometimes|string|in:adm,normal',
+        ]);
+
+        if($validator->fails()){ return response()->json($validator->errors()->toJson(), 400); }
+
+        $user = User::find($request->id);
+        $user->update($request->all());
+        $user->save();
+
+        $role = Role::where('role', '=', $request['role'])->first();
+
+        DB::table('user_roles')
+            ->where('user_id', '=', $request->id)
+            ->update([
+                'role_id' => $role->id,
+                'updated_at' => now(),
+            ]);
+
+        $user = User::with(['role'])->where('id','=',$user->id)->first();
+
+        return response()->json([
+            'message' => 'User successfully updated',
             'user' => $user
         ], 201);
     }
