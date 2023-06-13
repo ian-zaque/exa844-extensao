@@ -22,7 +22,8 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::resource('/auth', 'AuthController');
     Route::post('login', 'AuthController@login');
     Route::post('register', 'AuthController@register');
+    Route::post('create', 'AuthController@create');
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
-    Route::get('user-profile', 'AuthController@userProfile');
+    Route::get('me', 'AuthController@me');
 });
