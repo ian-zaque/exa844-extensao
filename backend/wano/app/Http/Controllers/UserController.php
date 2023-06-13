@@ -13,7 +13,7 @@ class UserController extends Controller
      * @return void
      */
     public function __construct() {
-        $this->middleware('auth:api', ['except' => ['index', 'show', 'create']]);
+        $this->middleware('auth:api', ['except' => ['index', 'show']]);
     }
 
     /**

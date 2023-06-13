@@ -31,3 +31,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
 Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::resource('/user', 'UserController');
 });
+
+Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
+    Route::resource('/role', 'RoleController');
+});
